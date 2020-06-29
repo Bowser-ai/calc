@@ -5,7 +5,7 @@ int main() {
 		
 		try {
             std::cout<<prompt;
-            double output =	expression();
+            double output =	declaration();
             Token T = Cs.get();
             
             switch (T.kind) {
