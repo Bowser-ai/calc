@@ -25,11 +25,11 @@ Token Calc_stream::get() const
 		return Token{num, value};
 	}
 		
-	if (std::isalpha(ch)) {
+	if (std::isalpha(ch) || allowed_char(ch)) {
 		std::cin.putback(ch);
 		std::string command;
-		while(std::cin.get(ch) && std::isalpha(ch)) command += ch;
-		if (!std::isalpha(ch)) std::cin.putback(ch);
+		while(std::cin.get(ch) && (std::isalpha(ch) || allowed_char(ch))) command += ch;
+		if (!std::isalpha(ch) && allowed_char(ch)) std::cin.putback(ch);
 		return Token(command_string, command);
 	}
 		is.putback(ch);
@@ -56,4 +56,9 @@ void Calc_stream::clean() const
     char c;
     if (empty) return;
     empty = true;
+}
+
+bool Calc_stream::allowed_char(char ch) const
+{
+    return allowed_var_chars.find(ch) != std::string::npos;
 }

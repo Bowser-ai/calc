@@ -1,4 +1,5 @@
 #include "token.h"
+#include "calc.h"
 #ifndef CALC_STREAM_H_
 #define CALC_STREAM_H_
 
@@ -15,6 +16,8 @@ class Calc_stream
 	void put_back(Token T); 
     void clean() const;
 
+    private:
+    bool allowed_char(char) const;
 };
 
 #endif

@@ -7,85 +7,84 @@ Var_table var_table;
 double declaration()
 {
 	Token T = Cs.get();
-	if (T.kind == command_string)
-	{
-		if (T.command == declkey)
-		{
-			auto var_name = Cs.get().command;
-			T = Cs.get();
-			if (T.kind != equals) throw std::runtime_error{"expecting an = after var_name in a let expression"};
-			double d = expression();
-			var_table.set_value(var_name, d);
-			return d;
-		}
-	}
+    if (T.kind == command_string && T.command == declkey)
+    {
+        auto var_name = Cs.get().command;
+        T = Cs.get();
+        if (T.kind != equals) throw std::runtime_error{"expecting an = after var_name in a let expression"};
+        double d = expression();
+        var_table.set_value(var_name, d);
+        return d;
+    }
 	Cs.put_back(T);
 	return expression();
 }
 
-double expression() {
-
+double expression() 
+{
 	auto output = 0.0;
 	output = term();
 	
-	while(true) {
+	while(true) 
+    {
 		Token T = Cs.get();
 	
-	switch (T.kind) {
-	
+	switch (T.kind) 
+    {
 		case addition:
-					output += term();
-					break;
+            output += term();
+            break;
 				
 		
 		case minus:  
-					output -= term();
-					break;
+            output -= term();
+            break;
 				
 	
 		default:	
-						Cs.put_back(T);
-						return output;
+            Cs.put_back(T);
+            return output;
 	
 		}
 	}
 }
 
-double term() {
-
+double term() 
+{
 	auto value = 0.0;
 	value = primary();
 		
-	while(true){
-
+	while(true)
+    {
 		Token T = Cs.get();
-		switch (T.kind) {
-	
+		switch (T.kind) 
+        {
 			case multi : 
-							value *= primary();
-							break;
+                value *= primary();
+                break;
 						
 			case division : 
-							value /= primary();
-							break;
+                value /= primary();
+                break;
 
             case factorial:
-                            value = fac(value);
-                            break;
+                value = fac(value);
+                break;
 	
 			default:
-						Cs.put_back(T);
-						return value;
+                Cs.put_back(T);
+                return value;
 					
 		}
 	}
 }
 
-double primary () {
+double primary () 
+{
 	Token T = Cs.get();
 
-	switch(T.kind) { 
-		
+	switch(T.kind) 
+    { 
 		case num:
 			return T.value;
 			
@@ -98,7 +97,8 @@ double primary () {
 				auto value{0.0};
 				value = expression();
 				Token T = Cs.get();
-				if (T.kind != matching_close_group) {
+				if (T.kind != matching_close_group) 
+                {
 					Cs.put_back(T);
 					throw std::runtime_error("Did you forgot the \')\'?");
 				}
@@ -116,13 +116,7 @@ double primary () {
 	throw std::runtime_error("Bad input");
 }
 
-
-					
-
 double fac(int n)
 {
 	return (n>1) ? n*fac(n-1) : 1;
 }
-
-
-
