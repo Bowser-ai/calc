@@ -1,8 +1,8 @@
-#include <string>
-#include <unordered_map>
-
 #ifndef VAR_TABLE_H_
 #define VAR_TABLE_H_
+
+#include <string>
+#include <unordered_map>
 
 class Var_table
 {

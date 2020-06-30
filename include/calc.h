@@ -1,3 +1,6 @@
+#ifndef CALC_H_
+#define CALC_H_
+
 #include <iostream>
 #include <math.h>
 #include <limits>
@@ -8,8 +11,6 @@
 #include <vector>
 #include "calc_stream.h"
 
-#ifndef CALC_H_
-#define CALC_H_
 
 constexpr double PI = 3.1415926535;
 

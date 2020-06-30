@@ -1,7 +1,8 @@
-#include "token.h"
-#include "calc.h"
 #ifndef CALC_STREAM_H_
 #define CALC_STREAM_H_
+
+#include "token.h"
+#include "calc.h"
 
 class Calc_stream
 {

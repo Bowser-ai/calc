@@ -29,7 +29,7 @@ Token Calc_stream::get() const
 		std::cin.putback(ch);
 		std::string command;
 		while(std::cin.get(ch) && (std::isalpha(ch) || allowed_char(ch))) command += ch;
-		if (!std::isalpha(ch) && allowed_char(ch)) std::cin.putback(ch);
+		if (!std::isalpha(ch) && !allowed_char(ch)) std::cin.putback(ch);
 		return Token(command_string, command);
 	}
 		is.putback(ch);
