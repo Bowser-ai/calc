@@ -106,8 +106,17 @@ double primary ()
 			}
 
 		case command_string:
-			if (T.command == square_root) return std::sqrt(expression());
-			return var_table.get_value(T.command);
+            {
+                if (T.command == square_root) return std::sqrt(expression());
+                auto T2 = Cs.get();
+                if ( T2.kind == equals)
+                {
+                    double d = expression();
+                    return var_table.reassign(T.command, d);
+                }
+                Cs.put_back(T2);
+                return var_table.get_value(T.command);
+            }
 
 		case quit:
 			exit(0);

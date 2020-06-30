@@ -26,3 +26,16 @@ bool Var_table::is_declared(const std::string& name) const
 	return var_table.find(name) != var_table.cend();
 }
 
+double Var_table::reassign(const std::string& name, double value)
+{
+    try
+    {
+        double& val = var_table.at(name);
+        val = value;
+        return val;
+    }
+    catch (std::out_of_range& e)
+    {
+        throw std::runtime_error{name + " not defined, please use the 'let' declaration\n"};
+    }
+}
