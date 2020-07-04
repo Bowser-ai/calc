@@ -24,6 +24,7 @@ const std::string prompt{"|> "};
 const std::string square_root{"sqrt"};
 const std::string _pow{"pow"};
 const std::string declkey{"let"};
+const std::string constkey{"const"};
 const std::string allowed_var_chars{"_"};
 constexpr int max_int{std::numeric_limits<int>::max()};
 constexpr char equals{'='};

@@ -4,18 +4,24 @@
 Calc_stream Cs{std::cin};
 Var_table var_table;
 
+double set_var(bool is_const=false)
+{
+	auto var_name = Cs.get().command;
+	auto T = Cs.get();
+	if (T.kind != equals) throw std::runtime_error{"expecting an = after var_name in a let expression"};
+	double d = expression();
+	var_table.set_value(var_name, d, is_const);
+	return d;
+}
+
 double declaration()
 {
 	Token T = Cs.get();
-    if (T.kind == command_string && T.command == declkey)
-    {
-        auto var_name = Cs.get().command;
-        T = Cs.get();
-        if (T.kind != equals) throw std::runtime_error{"expecting an = after var_name in a let expression"};
-        double d = expression();
-        var_table.set_value(var_name, d);
-        return d;
-    }
+    if (T.kind == command_string)
+		{
+			if (T.command == declkey) return set_var(false);
+			if (T.command == constkey) return set_var(true);
+		}
 	Cs.put_back(T);
 	return expression();
 }
