@@ -26,10 +26,10 @@ Token Calc_stream::get() const
 	}
 		
 	if (std::isalpha(ch) || allowed_char(ch)) {
-		std::cin.putback(ch);
+		is.putback(ch);
 		std::string command;
-		while(std::cin.get(ch) && (std::isalpha(ch) || allowed_char(ch))) command += ch;
-		if (!std::isalpha(ch) && !allowed_char(ch)) std::cin.putback(ch);
+		while(is.get(ch) && (std::isalpha(ch) || allowed_char(ch))) command += ch;
+		if (!std::isalpha(ch) && !allowed_char(ch)) is.putback(ch);
 		return Token(command_string, command);
 	}
 		is.putback(ch);
@@ -43,7 +43,7 @@ Token Calc_stream::buffer() const
 	return token_buffer;
 }
 
-void Calc_stream::put_back(Token T) 
+void Calc_stream::put_back(Token T) const
 {
 	if(!empty) throw std::runtime_error("buffer is full\n");
 	token_buffer = T;

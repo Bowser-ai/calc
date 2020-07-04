@@ -1,12 +1,13 @@
 #include "calc.h"
 
 int main() {
-	while(std::cin){
-		
+	Calc_stream cs{std::cin};
+
+	while(cs.is_ok()){
 		try {
             std::cout<<prompt;
-            double output =	declaration();
-            Token T = Cs.get();
+            double output =	declaration(cs);
+            Token T = cs.get();
             
             switch (T.kind) {
 
@@ -15,17 +16,15 @@ int main() {
                 break;
 
                 default: 
-                Cs.put_back(T);
+                cs.put_back(T);
                 break;
                     }
                 }
             catch (std::runtime_error&  e) {
                 std::cout << e.what() << "\n";
-                Cs.clean();
+                cs.clean();
                 }
             }
 
-return 0;
+	return 0;
 }
-
-

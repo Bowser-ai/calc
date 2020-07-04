@@ -14,10 +14,10 @@
 
 constexpr double PI = 3.1415926535;
 
-double declaration();
-double expression();
-double term();
-double primary();
+double declaration(const Calc_stream& cs);
+double expression(const Calc_stream& cs);
+double term(const Calc_stream& cs);
+double primary(const Calc_stream& cs);
 double fac(int);
 
 const std::string prompt{"|> "};
@@ -42,7 +42,4 @@ constexpr char print_line{'\n'};
 constexpr char command_string{'s'};
 constexpr char factorial{'!'};
 
-extern Calc_stream Cs;
-
 #endif
-

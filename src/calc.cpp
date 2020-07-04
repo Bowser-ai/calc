@@ -1,76 +1,75 @@
 #include "calc.h"
 #include "var_table.h"
 
-Calc_stream Cs{std::cin};
 Var_table var_table;
 
-double set_var(bool is_const=false)
+double set_var(const Calc_stream& cs, bool is_const=false)
 {
-	auto var_name = Cs.get().command;
-	auto T = Cs.get();
+	auto var_name = cs.get().command;
+	auto T = cs.get();
 	if (T.kind != equals) throw std::runtime_error{"expecting an = after var_name in a let expression"};
-	double d = expression();
+	double d = expression(cs);
 	var_table.set_value(var_name, d, is_const);
 	return d;
 }
 
-double declaration()
+double declaration(const Calc_stream& cs)
 {
-	Token T = Cs.get();
+	Token T = cs.get();
     if (T.kind == command_string)
 		{
-			if (T.command == declkey) return set_var(false);
-			if (T.command == constkey) return set_var(true);
+			if (T.command == declkey) return set_var(cs, false);
+			if (T.command == constkey) return set_var(cs, true);
 		}
-	Cs.put_back(T);
-	return expression();
+	cs.put_back(T);
+	return expression(cs);
 }
 
-double expression() 
+double expression(const Calc_stream& cs) 
 {
 	auto output = 0.0;
-	output = term();
+	output = term(cs);
 	
 	while(true) 
     {
-		Token T = Cs.get();
+		Token T = cs.get();
 	
 	switch (T.kind) 
     {
 		case addition:
-            output += term();
+            output += term(cs);
             break;
 				
 		
 		case minus:  
-            output -= term();
+            output -= term(cs);
             break;
 				
 	
 		default:	
-            Cs.put_back(T);
+            cs.put_back(T);
             return output;
 	
 		}
 	}
 }
 
-double term() 
+double term(const Calc_stream& cs) 
 {
 	auto value = 0.0;
-	value = primary();
+	value = primary(cs);
 		
 	while(true)
     {
-		Token T = Cs.get();
+		Token T = cs.get();
 		switch (T.kind) 
         {
 			case multi : 
-                value *= primary();
+                value *= primary(cs);
                 break;
 						
 			case division : 
-                value /= primary();
+                value /= primary(cs);
                 break;
 
             case factorial:
@@ -78,16 +77,16 @@ double term()
                 break;
 	
 			default:
-                Cs.put_back(T);
+                cs.put_back(T);
                 return value;
 					
 		}
 	}
 }
 
-double primary () 
+double primary(const Calc_stream& cs) 
 {
-	Token T = Cs.get();
+	Token T = cs.get();
 
 	switch(T.kind) 
     { 
@@ -101,11 +100,11 @@ double primary ()
 					{brac_group_open, brac_group_close}, {group_open, group_close}};
 				char matching_close_group{match_grouping.at(T.kind)};
 				auto value{0.0};
-				value = expression();
-				Token T = Cs.get();
+				value = expression(cs);
+				Token T = cs.get();
 				if (T.kind != matching_close_group) 
                 {
-					Cs.put_back(T);
+					cs.put_back(T);
 					throw std::runtime_error("Did you forgot the \')\'?");
 				}
 				return value;
@@ -113,14 +112,14 @@ double primary ()
 
 		case command_string:
             {
-                if (T.command == square_root) return std::sqrt(expression());
-                auto T2 = Cs.get();
+                if (T.command == square_root) return std::sqrt(expression(cs));
+                auto T2 = cs.get();
                 if ( T2.kind == equals)
                 {
-                    double d = expression();
+                    double d = expression(cs);
                     return var_table.reassign(T.command, d);
                 }
-                Cs.put_back(T2);
+                cs.put_back(T2);
                 return var_table.get_value(T.command);
             }
 
